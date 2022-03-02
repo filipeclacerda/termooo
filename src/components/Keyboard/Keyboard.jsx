@@ -45,7 +45,7 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
     const addRow = () => {
         let [row, colmun] = getActualRowAndColmun();
         if (row < 5) {
-            setActivePosition([row + 1, colmun])
+            setActivePosition([row + 1, 0])
         }
 
     }
