@@ -7,7 +7,7 @@ export default function Home({typedLetter, activePosition, setActivePosition, ma
   return (
     <div className="home">
         {rows.map(r=>(
-            <Row typedLetter={typedLetter} statusLetters={statusLetters} rowid={r} activePosition={activePosition} setActivePosition={setActivePosition} matrix={matrix}/>
+            <Row key={r} typedLetter={typedLetter} statusLetters={statusLetters} rowid={r} activePosition={activePosition} setActivePosition={setActivePosition} matrix={matrix}/>
         ))}
     </div>
   )

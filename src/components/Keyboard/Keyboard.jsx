@@ -1,12 +1,12 @@
 import "./keyboard.scss"
 import BackspaceIcon from '@mui/icons-material/Backspace';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCookie, setCookie } from "../utils/Cookies";
 
-export default function Keyboard({ setTypedLetter, activePosition, setActivePosition, matrix, setMatrix, statusLetters, setStatusLetters, word }) {
+export default function Keyboard({ setTypedLetter, activePosition, setActivePosition, matrix, setMatrix, statusLetters, setStatusLetters, word, gameEnded, setGameEnded }) {
     const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
-    const [gameEnded, setGameEnded] = useState(false)
     const calcNextPosition = () => {
         let [firstPosition, secondPosition] = getActualRowAndColmun()
         if (secondPosition !== 4) {
@@ -100,6 +100,7 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
             else {
                 alert("you must fill the 5 letters")
             }
+            setAllCookies(matrix, activePosition) 
         }
     }
 
@@ -113,25 +114,33 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
             let positionY = activePosition[0];
             tmpMatrix[positionY][positionX] = key;
             setMatrix(() => (tmpMatrix));
+            setAllCookies(tmpMatrix, nextPosition);
         }
     }
 
+    const setAllCookies = (tmpMatrix, nextPosition) =>{
+        setCookie('matrixCookie', JSON.stringify(tmpMatrix), 1)
+        setCookie('activePosition', JSON.stringify(nextPosition), 1)
+        setCookie('statusLetters', JSON.stringify(statusLetters), 1)
+        setCookie('gameEnded', true, 1)
+    }
+      
     return (
         <div className="keyboard">
             <div className="first">
                 {firstRow.map(key => (
-                    <div className="key" id={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className="key" id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
             </div>
             <div className="second">
                 {secondRow.map(key => (
-                    <div className="key" id={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className="key" id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
-                <div className="key" id="back" onClick={BackspacePressed}><BackspaceIcon /></div>
+                <div className="key" id="back"  onClick={BackspacePressed}><BackspaceIcon /></div>
             </div>
             <div className="third">
                 {thirdRow.map(key => (
-                    <div className="key" id={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className="key" id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
                 <div className="key" id="enter" onClick={submitAnswer}>ENTER</div>
             </div>

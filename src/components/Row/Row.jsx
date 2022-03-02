@@ -13,7 +13,7 @@ export default function Row({ typedLetter, statusLetters, activeRow, rowid, acti
     return (
         <div className={`row`}>
             {letters.map(l => (
-                <div className={l} onClick={() => (statusLetters[rowid][l] === 'edit') ? handleClick(l) : null}>
+                <div key={l} className={l} onClick={() => (statusLetters[rowid][l] === 'edit') ? handleClick(l) : null}>
                     <LetterEmpty
                         className="letters"
                         status={statusLetters}
