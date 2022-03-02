@@ -1,0 +1,32 @@
+.letterSlot{
+    border: 6px solid #4C4347;
+    height: 77px;
+    width: 77px;
+    margin: 3px;
+    border-radius: 10%;
+    cursor: pointer;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    font-weight: 600;
+    color: white;
+
+
+    &.active{
+        border-bottom: 12px solid #4C4347;
+    }
+
+    &.old{
+        border-color: #312A2C;
+        background-color: #312A2C;
+    }
+
+    &.new{
+        border-color: #615458;
+        background-color: #615458;
+    }
+}

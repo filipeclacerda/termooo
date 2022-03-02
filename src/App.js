@@ -1,23 +1,32 @@
 import logo from './logo.svg';
-import './App.css';
+import "./app.scss";
+import Home from './components/Home/Home';
+import Header from './components/Header/Header';
+import Keyboard from './components/Keyboard/Keyboard';
+import { createContext, useEffect, useRef, useState } from 'react';
 
 function App() {
+  const [activePosition, setActivePosition] = useState([0,0]);
+  const [typedLetter, setTypedLetter] = useState('')
+  const correctAnswer = () =>{
+    
+  }
+  const [matrix, setMatrix] = useState([
+    ['','','','',''],
+    ['','','','',''],
+    ['','','','',''],
+    ['','','','',''],
+    ['','','','',''],
+    ['','','','',''],
+])
+
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header/>
+      <Home typedLetter={typedLetter} activePosition={activePosition} setActivePosition={setActivePosition} matrix={matrix}/>
+      <Keyboard setTypedLetter={setTypedLetter} activePosition={activePosition} setActivePosition={setActivePosition} matrix={matrix} setMatrix={setMatrix}/>
     </div>
   );
 }
