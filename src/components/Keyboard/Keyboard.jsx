@@ -4,9 +4,26 @@ import { useEffect, useState } from "react";
 import { getCookie, setCookie } from "../utils/Cookies";
 
 export default function Keyboard({ setTypedLetter, activePosition, setActivePosition, matrix, setMatrix, statusLetters, setStatusLetters, word, gameEnded, setGameEnded }) {
+
     const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+    const [rightLetters, setRightLetters] = useState([])
+    const [wrongLetters, setWrongLetters] = useState([])
+    const [placeLetters, setPlaceLetters] = useState([])
+
+    useEffect(() => {
+        let rightLetters = getCookie("rightLetters")
+        let wrongLetters = getCookie("wrongLetters")
+        let placeLetters = getCookie("placeLetters")
+
+        if (rightLetters) {
+            setRightLetters(JSON.parse(rightLetters))
+            setWrongLetters(JSON.parse(wrongLetters))
+            setPlaceLetters(JSON.parse(placeLetters))
+        }
+      }, [])
+
     const calcNextPosition = () => {
         let [firstPosition, secondPosition] = getActualRowAndColmun()
         if (secondPosition !== 4) {
@@ -30,6 +47,7 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
             let returnArray = [firstPosition, secondPosition]
             setMatrix(tmpMatrix)
             setActivePosition(returnArray)
+            setAllCookies(matrix, activePosition)
         }
 
     }
@@ -46,6 +64,7 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         let [row, colmun] = getActualRowAndColmun();
         if (row < 5) {
             setActivePosition([row + 1, 0])
+            setAllCookies(matrix, [row + 1, 0])
         }
 
     }
@@ -54,8 +73,9 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         tmpstatusLetters[activePosition[0]] = ['correct', 'correct', 'correct', 'correct', 'correct'];
         setStatusLetters(tmpstatusLetters)
         console.log(statusLetters)
-        setGameEnded(true) 
-        setActivePosition([0,0])
+        setGameEnded(true)
+        setCookie('gameEnded', true, 1)
+        setActivePosition([0, 0])
     }
 
     const wrongAnswer = () => {
@@ -65,8 +85,8 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         if (activePosition[0] < 5) {
             tmpstatusLetters[activePosition[0] + 1] = ['edit', 'edit', 'edit', 'edit', 'edit'];
         }
-        setStatusLetters(tmpstatusLetters)
         addRow()
+        setStatusLetters(tmpstatusLetters)
     }
 
     const checkRightLetters = () => {
@@ -74,13 +94,34 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         matrix[activePosition[0]].forEach(function (element, index) {
             if (element === word.split('')[index]) {
                 letrasCorretas.push('correct')
+                setRightLetters(putLetterIntoRightLetters(element))
             } else if (word.split('').join('').includes(element)) {
                 letrasCorretas.push('place')
+                setPlaceLetters(putLetterIntoPlaceLetters(element))
             } else {
                 letrasCorretas.push('old')
+                setWrongLetters(putLetterIntoWrongLetters(element))
             }
         })
         return letrasCorretas
+    }
+
+    const putLetterIntoPlaceLetters = (letter) => {
+        let tmpPlaceLetters = placeLetters
+        tmpPlaceLetters.push(letter)
+        return tmpPlaceLetters
+    }
+
+    const putLetterIntoRightLetters = (letter) => {
+        let tmpRightLetters = rightLetters
+        tmpRightLetters.push(letter)
+        return tmpRightLetters
+    }
+
+    const putLetterIntoWrongLetters = (letter) => {
+        let tmpWrongLetters = wrongLetters
+        tmpWrongLetters.push(letter)
+        return tmpWrongLetters
     }
 
     const submitAnswer = () => {
@@ -94,13 +135,15 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
                 else {
                     if (typedWord !== word) {
                         wrongAnswer()
+                        setCookie('rightLetters', JSON.stringify(rightLetters), 1)
+                        setCookie('wrongLetters', JSON.stringify(wrongLetters), 1)
+                        setCookie('placeLetters', JSON.stringify(placeLetters), 1)
                     }
                 }
             }
             else {
                 alert("you must fill the 5 letters")
             }
-            setAllCookies(matrix, activePosition) 
         }
     }
 
@@ -118,31 +161,30 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         }
     }
 
-    const setAllCookies = (tmpMatrix, nextPosition) =>{
+    const setAllCookies = (tmpMatrix, nextPosition) => {
         setCookie('matrixCookie', JSON.stringify(tmpMatrix), 1)
         setCookie('activePosition', JSON.stringify(nextPosition), 1)
         setCookie('statusLetters', JSON.stringify(statusLetters), 1)
-        setCookie('gameEnded', true, 1)
     }
-      
+
     return (
         <div className="keyboard">
             <div className="first">
                 {firstRow.map(key => (
-                    <div className="key" id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className={`key ${(rightLetters.includes(key))?'right':''} ${(wrongLetters.includes(key))?'wrong': ''} ${(placeLetters.includes(key))?'place':''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
             </div>
             <div className="second">
                 {secondRow.map(key => (
-                    <div className="key" id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className={`key ${(rightLetters.includes(key))?'right':''} ${(wrongLetters.includes(key))?'wrong': ''} ${(placeLetters.includes(key))?'place':''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
-                <div className="key" id="back"  onClick={BackspacePressed}><BackspaceIcon /></div>
+                <div className={`key`} id="back" onClick={BackspacePressed}><BackspaceIcon /></div>
             </div>
             <div className="third">
                 {thirdRow.map(key => (
-                    <div className="key" id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className={`key ${(rightLetters.includes(key))?'right':''} ${(wrongLetters.includes(key))?'wrong': ''} ${(placeLetters.includes(key))?'place':''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
-                <div className="key" id="enter" onClick={submitAnswer}>ENTER</div>
+                <div className={`key`} id="enter" onClick={submitAnswer}>ENTER</div>
             </div>
 
         </div>
