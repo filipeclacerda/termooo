@@ -1,32 +1,45 @@
-import logo from './logo.svg';
 import "./app.scss";
 import Home from './components/Home/Home';
 import Header from './components/Header/Header';
 import Keyboard from './components/Keyboard/Keyboard';
-import { createContext, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
-  const [activePosition, setActivePosition] = useState([0,0]);
+  const [activePosition, setActivePosition] = useState([0, 0]);
   const [typedLetter, setTypedLetter] = useState('')
-  const correctAnswer = () =>{
-    
+  const correctAnswer = () => {
+
   }
+
   const [matrix, setMatrix] = useState([
-    ['','','','',''],
-    ['','','','',''],
-    ['','','','',''],
-    ['','','','',''],
-    ['','','','',''],
-    ['','','','',''],
-])
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+  ])
 
+  const [statusRows, setStatusRows] = useState(['edit', 'new', 'new', 'new', 'new', 'new'])
 
-  
   return (
     <div className="app">
-      <Header/>
-      <Home typedLetter={typedLetter} activePosition={activePosition} setActivePosition={setActivePosition} matrix={matrix}/>
-      <Keyboard setTypedLetter={setTypedLetter} activePosition={activePosition} setActivePosition={setActivePosition} matrix={matrix} setMatrix={setMatrix}/>
+      <Header />
+      <Home
+        typedLetter={typedLetter}
+        activePosition={activePosition}
+        setActivePosition={setActivePosition}
+        matrix={matrix}
+        statusRows={statusRows} />
+      <Keyboard
+        setTypedLetter={setTypedLetter}
+        activePosition={activePosition}
+        setActivePosition={setActivePosition}
+        matrix={matrix}
+        setMatrix={setMatrix}
+        statusRows={statusRows}
+        setStatusRows={setStatusRows}
+      />
     </div>
   );
 }

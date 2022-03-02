@@ -1,18 +1,15 @@
 import "./keyboard.scss"
 import BackspaceIcon from '@mui/icons-material/Backspace';
-import { useEffect } from "react";
 
-export default function Keyboard({ setTypedLetter, activePosition, setActivePosition, matrix, setMatrix }) {
+export default function Keyboard({ setTypedLetter, activePosition, setActivePosition, matrix, setMatrix, setStatusRows, statusRows }) {
     const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
 
 
-    const calcNextPosition = (array) => {
-
-        let firstPosition = array[0];
-        let secondPosition = array[1];
-        if (secondPosition == 4) {
+    const calcNextPosition = () => {
+        let [firstPosition, secondPosition] = getActualRowAndColmun()
+        if (secondPosition === 4) {
             secondPosition = 0;
             //firstPosition++;
         }
@@ -25,15 +22,15 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
     }
 
     const BackspacePressed = () => {
-        let array = activePosition
-        let firstPosition = array[0];
-        let secondPosition = array[1];
+        let [firstPosition, secondPosition] = getActualRowAndColmun()
         let tmpMatrix = matrix;
         let positionX = activePosition[1];
         let positionY = activePosition[0];
         tmpMatrix[positionY][positionX] = '';
-        if(secondPosition != 0){
+        if(secondPosition !== 0){
             secondPosition--;    
+        }else{
+            secondPosition=4;
         }
         let returnArray = [firstPosition, secondPosition]
         setMatrix(tmpMatrix)
@@ -41,16 +38,51 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
 
     }
 
+    const getActualRowAndColmun = () =>{
+        let actualPosition = activePosition;
+        let firstPosition = actualPosition[0];
+        let secondPosition = actualPosition[1];
+        return [firstPosition, secondPosition];
+
+    }
+
+    const addRow = () =>{
+        let [row, colmun] = getActualRowAndColmun();
+        if(row < 5){
+            setActivePosition([row+1, colmun])
+        }
+        
+    }
+    const rightAnswer = () =>{
+        let tmpStatusRows = statusRows;
+        tmpStatusRows[activePosition[0]] = 'correct';
+        setStatusRows(tmpStatusRows)
+        console.log(statusRows)
+        addRow() //temporary solve
+    }
+
+    const wrongAnswer = () =>{
+        let tmpStatusRows = statusRows;
+        tmpStatusRows[activePosition[0]] = 'old';
+        if(activePosition[0] < 5){
+            tmpStatusRows[activePosition[0]+1] = 'edit';
+        }
+        setStatusRows(tmpStatusRows)
+        console.log(activePosition)
+        console.log(activePosition[0])
+        addRow()
+    }
     const submitAnswer = () => {
-        let row = activePosition[0]
-        let colmun = activePosition[1]
+        let [row, colmun] = getActualRowAndColmun()
         let word = matrix[row].join('')
-        if(word.length == 5 ){
-            if(word == "REACT"){
-                alert("correct answer")
+        if(word.length === 5 ){
+            if(word === "REACT"){
+                rightAnswer()                
             }
             else{
-                alert('wrong answer')
+                if(word !== "REACT"){
+                    wrongAnswer()
+                }
             }
         }
         else{
@@ -60,7 +92,7 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
 
     const changePosition = (key) => {
         setTypedLetter(key)
-        let nextPosition = calcNextPosition(activePosition);
+        let nextPosition = calcNextPosition();
         setActivePosition(nextPosition)
         let tmpMatrix = matrix;
         let positionX = activePosition[1];
