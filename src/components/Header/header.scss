@@ -1,11 +1,17 @@
+@import "../../global.scss";
+
 .header{
     display: flex;
     align-items: flex-start;
     justify-content: center;
     width: 100%;
-    height: 160px;
+    position: absolute;
+    top: 10px;
     .container{
         width: 720px;
+        @include mobile {
+            width: 400px;
+        }
         display: flex;
         align-items: center;
         justify-content: space-between;
