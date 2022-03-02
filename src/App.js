@@ -63,7 +63,9 @@ function App() {
         matrix={matrix}
         statusLetters={statusLetters}
       />
-      <EndMessage title="Você venceu!" body="parabens" footer="top"/>
+      {(gameEnded) ? 
+        <EndMessage title="Você venceu!" body="parabens" footer="top"/>
+      : ''}
       <Keyboard
         setTypedLetter={setTypedLetter}
         activePosition={activePosition}
