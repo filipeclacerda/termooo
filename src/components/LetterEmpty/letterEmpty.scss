@@ -14,7 +14,7 @@
     font-size: 35px;
     font-weight: 600;
     color: white;
-
+    transition: all 0.2s ease;
 
     &.active{
         border-bottom: 12px solid #4C4347;
@@ -32,5 +32,9 @@
     &.correct{
         border-color: #3aa394;
         background-color: #3aa394;
+    }
+    &.place{
+        border-color: #d3ad69;
+        background-color: #d3ad69;
     }
 }
