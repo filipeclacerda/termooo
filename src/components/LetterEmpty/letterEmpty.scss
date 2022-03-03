@@ -4,7 +4,7 @@
     border: 6px solid #4C4347;
     height: 77px;
     width: 77px;
-    margin: 2px;
+    // margin: 2px;
     border-radius: 10%;
     cursor: pointer;
     box-sizing: border-box;
@@ -19,8 +19,8 @@
     color: white;
     transition: all 0.2s ease;
     @include mobile {
-        height: 65px;
-        width: 65px;
+        height: 60px;
+        width: 60px;
     }
 
     &.active{
