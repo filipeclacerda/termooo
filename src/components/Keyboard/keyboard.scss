@@ -1,13 +1,14 @@
 @import "../../global.scss";
 
 .keyboard{
-    display: flex;
+    display: grid;
     flex-direction: column;
     align-items: center;
+    overflow-y: hidden;
     justify-content: center;
     margin-top: 30px;
     .first{
-        margin-left: -20px;
+        margin-left: 0px;
         display: flex;
     }
     .second{
@@ -21,7 +22,7 @@
         margin-left: 60px;
         display: flex;
         @include mobile {
-            margin-left: 10px;
+            margin-left: 20px;
         }
     }
     .key{
@@ -38,9 +39,7 @@
         color: white;
         cursor: pointer;
         @include mobile {
-            height: 63px;
-            width: 32px;
-            font-size: 17px;
+            font-size: 20px;
             margin: 1.5px;
         }
         &.place{
@@ -67,7 +66,7 @@
         width: 167px;
         @include mobile {
             margin-left: 10px;
-            width: 67px;
+            width: 87px;
         }
     }
 }

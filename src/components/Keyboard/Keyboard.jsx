@@ -75,6 +75,7 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         console.log(statusLetters)
         setGameEnded(true)
         setCookie('gameEnded', true, 1)
+        setCookie('statusLetters', JSON.stringify(tmpstatusLetters), 1)
         setActivePosition([0, 0])
     }
 
