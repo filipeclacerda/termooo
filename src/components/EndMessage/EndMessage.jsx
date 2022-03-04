@@ -22,10 +22,10 @@ export default function EndMessage({ title, score, highscore, restartGame }) {
         </div>
         <div className="body">
           <div className="score">
-            Your Score: {score}
+            Sua pontuação: {score}
           </div>
           <div className="highscore">
-            Your High Score: {highscore}
+            Seu recorde: {highscore}
           </div>
         </div>
         <div className="footer">
