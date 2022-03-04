@@ -1,16 +1,36 @@
 import "./keyboard.scss"
 import BackspaceIcon from '@mui/icons-material/Backspace';
 import { useEffect, useState } from "react";
-import { getCookie, setCookie } from "../utils/Cookies";
+import { getCookie, setCookie } from "../../utils/Cookies";
 
-export default function Keyboard({ setTypedLetter, activePosition, setActivePosition, matrix, setMatrix, statusLetters, setStatusLetters, word, gameEnded, setGameEnded }) {
+export default function Keyboard({
+    setTypedLetter,
+    activePosition,
+    setActivePosition,
+    matrix,
+    setMatrix,
+    statusLetters,
+    setStatusLetters,
+    word,
+    gameEnded,
+    setGameEnded,
+    setScore,
+    score,
+    setGameStatus,
+    rightLetters,
+    setRightLetters,
+    wrongLetters,
+    setWrongLetters,
+    placeLetters,
+    setPlaceLetters,
+    highscore,
+    setHighScore
+}) {
 
     const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
-    const [rightLetters, setRightLetters] = useState([])
-    const [wrongLetters, setWrongLetters] = useState([])
-    const [placeLetters, setPlaceLetters] = useState([])
+    
 
     useEffect(() => {
         let rightLetters = getCookie("rightLetters")
@@ -22,7 +42,7 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
             setWrongLetters(JSON.parse(wrongLetters))
             setPlaceLetters(JSON.parse(placeLetters))
         }
-      }, [])
+    }, [])
 
     const calcNextPosition = () => {
         let [firstPosition, secondPosition] = getActualRowAndColmun()
@@ -72,11 +92,19 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         let tmpstatusLetters = statusLetters;
         tmpstatusLetters[activePosition[0]] = ['correct', 'correct', 'correct', 'correct', 'correct'];
         setStatusLetters(tmpstatusLetters)
-        console.log(statusLetters)
         setGameEnded(true)
         setCookie('gameEnded', true, 1)
         setCookie('statusLetters', JSON.stringify(tmpstatusLetters), 1)
         setActivePosition([0, 0])
+        let newScore = score+1
+        setCookie("score", newScore, 1)
+        setScore(()=>newScore)
+        if(newScore>highscore){
+            console.log(newScore, highscore)
+            setHighScore(newScore)
+            setCookie("highscore", newScore, 1)
+        }
+        setGameStatus('win')
     }
 
     const wrongAnswer = () => {
@@ -85,8 +113,13 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         tmpstatusLetters[activePosition[0]] = checkRightLetters();
         if (activePosition[0] < 5) {
             tmpstatusLetters[activePosition[0] + 1] = ['edit', 'edit', 'edit', 'edit', 'edit'];
+            addRow()
         }
-        addRow()
+        else{
+            setGameEnded(true)
+            setGameStatus('lose')
+            setScore(0)
+        }
         setStatusLetters(tmpstatusLetters)
     }
 
@@ -172,18 +205,18 @@ export default function Keyboard({ setTypedLetter, activePosition, setActivePosi
         <div className="keyboard">
             <div className="first">
                 {firstRow.map(key => (
-                    <div className={`key ${(rightLetters.includes(key))?'right':''} ${(wrongLetters.includes(key))?'wrong': ''} ${(placeLetters.includes(key))?'place':''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className={`key ${(rightLetters.includes(key)) ? 'right' : ''} ${(wrongLetters.includes(key)) ? 'wrong' : ''} ${(placeLetters.includes(key)) ? 'place' : ''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
             </div>
             <div className="second">
                 {secondRow.map(key => (
-                    <div className={`key ${(rightLetters.includes(key))?'right':''} ${(wrongLetters.includes(key))?'wrong': ''} ${(placeLetters.includes(key))?'place':''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className={`key ${(rightLetters.includes(key)) ? 'right' : ''} ${(wrongLetters.includes(key)) ? 'wrong' : ''} ${(placeLetters.includes(key)) ? 'place' : ''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
                 <div className={`key`} id="back" onClick={BackspacePressed}><BackspaceIcon /></div>
             </div>
             <div className="third">
                 {thirdRow.map(key => (
-                    <div className={`key ${(rightLetters.includes(key))?'right':''} ${(wrongLetters.includes(key))?'wrong': ''} ${(placeLetters.includes(key))?'place':''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
+                    <div className={`key ${(rightLetters.includes(key)) ? 'right' : ''} ${(wrongLetters.includes(key)) ? 'wrong' : ''} ${(placeLetters.includes(key)) ? 'place' : ''}`} id={key} key={key} onClick={() => { changePosition(key) }}>{key}</div>
                 ))}
                 <div className={`key`} id="enter" onClick={submitAnswer}>ENTER</div>
             </div>

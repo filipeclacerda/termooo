@@ -1,4 +1,5 @@
 $width: 768px;
+$correctColor: #3aa394;
 
 @mixin mobile{
     @media (max-width: #{$width}) {

@@ -10,12 +10,6 @@
     align-items: center;
     justify-content: center;
     
-    &.on{
-        opacity: 0.88;
-    }
-    &.off{
-        opacity: 0;
-    }
     .container{
         width: 50%;
         height: 80%;
@@ -32,8 +26,54 @@
             justify-self: start;
             margin-top: 35px;
         }
+        .body{
+            
+        }
         .footer{
+            height: 170px;
             margin-bottom: 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .message{
+                font-size: 35px;
+                height: 100px;
+                width: 100%;
+                
+            }
+            .restartDiv{
+                height: 200px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .restartGame{
+                    background-color: $correctColor;
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    .resetArrow{
+                        transition: all 0.3s ease;
+                        font-size: 70px;
+                        &:hover{
+                            margin-right: 4px;
+                            font-size: 80px;
+                            rotate: (-90deg);
+                        }
+                    }
+                    &:hover{
+                        width: 110px;
+                        height: 110px;
+
+                    }
+                }
+            }
         }
     }
 }
