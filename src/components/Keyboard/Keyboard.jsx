@@ -118,6 +118,7 @@ export default function Keyboard({
             setGameEnded(true)
             setGameStatus('lose')
             setScore(0)
+            setCookie("score", 0, 350)
         }
         setStatusLetters(tmpstatusLetters)
     }
