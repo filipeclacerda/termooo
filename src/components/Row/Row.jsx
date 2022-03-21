@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LetterEmpty from "../LetterEmpty/LetterEmpty";
 import "./row.scss";
 

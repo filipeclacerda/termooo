@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import dict from "./dict.json"
 import { setCookie, getCookie, eraseCookie } from "./utils/Cookies"
 import EndMessage from "./components/EndMessage/EndMessage";
-import { matrixDefault } from "./utils/MatrixDefault";
+//import { matrixDefault } from "./utils/MatrixDefault";
 import { statusLettersDefault } from "./utils/StatusLettersDefault";
 
 
@@ -106,7 +106,12 @@ function App() {
         statusLetters={statusLetters}
       />
       {(gameEnded) ?
-        <EndMessage title={(gameStatus==='win') ? "Incrível, Parabéns!!" : "Tente novamente!"} score={score} highscore={highscore} restartGame={restartGame} />
+        <EndMessage
+          title={(gameStatus==='win') ? "Incrível, Parabéns!!" : "Tente novamente!"}
+          score={score}
+          highscore={highscore}
+          restartGame={restartGame}
+          word={word} />
         : ''}
       <Keyboard
         setTypedLetter={setTypedLetter}

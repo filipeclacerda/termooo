@@ -1,6 +1,6 @@
 import "./keyboard.scss"
 import BackspaceIcon from '@mui/icons-material/Backspace';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getCookie, setCookie } from "../../utils/Cookies";
 
 export default function Keyboard({
@@ -33,16 +33,16 @@ export default function Keyboard({
     
 
     useEffect(() => {
-        let rightLetters = getCookie("rightLetters")
-        let wrongLetters = getCookie("wrongLetters")
-        let placeLetters = getCookie("placeLetters")
+        let rightLettersCookie = getCookie("rightLetters")
+        let wrongLettersCookie = getCookie("wrongLetters")
+        let placeLettersCookie = getCookie("placeLetters")
 
-        if (rightLetters) {
-            setRightLetters(JSON.parse(rightLetters))
-            setWrongLetters(JSON.parse(wrongLetters))
-            setPlaceLetters(JSON.parse(placeLetters))
+        if (rightLettersCookie) {
+            setRightLetters(JSON.parse(rightLettersCookie))
+            setWrongLetters(JSON.parse(wrongLettersCookie))
+            setPlaceLetters(JSON.parse(placeLettersCookie))
         }
-    }, [])
+    }, [setRightLetters, setWrongLetters, setPlaceLetters])
 
     const calcNextPosition = () => {
         let [firstPosition, secondPosition] = getActualRowAndColmun()
@@ -81,7 +81,7 @@ export default function Keyboard({
     }
 
     const addRow = () => {
-        let [row, colmun] = getActualRowAndColmun();
+        let [row] = getActualRowAndColmun();
         if (row < 5) {
             setActivePosition([row + 1, 0])
             setAllCookies(matrix, [row + 1, 0])
@@ -93,16 +93,15 @@ export default function Keyboard({
         tmpstatusLetters[activePosition[0]] = ['correct', 'correct', 'correct', 'correct', 'correct'];
         setStatusLetters(tmpstatusLetters)
         setGameEnded(true)
-        setCookie('gameEnded', true, 1)
-        setCookie('statusLetters', JSON.stringify(tmpstatusLetters), 1)
+        setCookie('gameEnded', true, 2)
+        setCookie('statusLetters', JSON.stringify(tmpstatusLetters), 2)
         setActivePosition([0, 0])
         let newScore = score+1
-        setCookie("score", newScore, 1)
+        setCookie("score", newScore, 350)
         setScore(()=>newScore)
         if(newScore>highscore){
-            console.log(newScore, highscore)
             setHighScore(newScore)
-            setCookie("highscore", newScore, 1)
+            setCookie("highscore", newScore, 350)
         }
         setGameStatus('win')
     }
@@ -160,7 +159,7 @@ export default function Keyboard({
 
     const submitAnswer = () => {
         if (!gameEnded) {
-            let [row, colmun] = getActualRowAndColmun()
+            let [row] = getActualRowAndColmun()
             let typedWord = matrix[row].join('')
             if (typedWord.length === 5) {
                 if (typedWord === word) {
